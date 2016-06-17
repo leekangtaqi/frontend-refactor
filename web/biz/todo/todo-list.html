@@ -1,0 +1,60 @@
+<todo-list show="{show}">
+    <style>
+        .done{
+            color: red
+        }
+    </style>
+    <div><b>FIRST TODO NAME: </b> {opts.firstToName}</div>
+    <ul>
+        <li show="{isShow(todo)}" class="{done: todo.isDone}" onclick="{onDoneTodo(todo.id)}" each="{todo in opts.todos}">{todo.name}</li>
+    </ul>
+    <ul>
+        <li onclick="{visibilityTodos('all')}">showAll</li>
+        <li onclick="{visibilityTodos('done')}">showDone</li>
+        <li onclick="{visibilityTodos('todo')}">showTodo</li>
+    </ul>
+    <input type="text" name="todoName"/>
+    <input onclick="{onAddTodo}" type="button" value="添加"/>
+    <script>
+        "use strict";
+        import actions from '../todo/todo.actions';
+        import {connect} from '../../framework/riot-redux';
+
+        connect(
+            (state, ownProp) => ({
+                todos: state.todos,
+                visibility: state.visibility,
+                firstToName: state.todos[0].name
+            }),
+            (dispatch) => ({
+                addTodo: text => {dispatch(actions.addTodo(text))},
+                toggleDoneTodo: id => {dispatch(actions.toggleDoneTodo(id))},
+                visibilityTodos: type => {dispatch(actions.visibilityTodos(type))},
+                getTodos: ()=> {dispatch(actions.getTodos())}
+            })
+        )(this);
+
+        this.isShow = todo =>{
+            if(this.opts.visibility === 'all'){
+                return true;
+            }
+            if(this.opts.visibility === 'done' && todo.isDone){
+                return true;
+            }
+            if(this.opts.visibility === 'todo' && !todo.isDone){
+                return true;
+            }
+            return false;
+        };
+        this.visibilityTodos = type => e => {
+            this.opts.visibilityTodos(type);
+        };
+        this.onDoneTodo = id => e => {
+            this.opts.toggleDoneTodo(id);
+        };
+        this.onAddTodo = e => {
+            this.opts.addTodo(this.todoName.value);
+            this.todoName.value = "";
+        };
+    </script>
+</todo-list>

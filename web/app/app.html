@@ -1,0 +1,27 @@
+require('../biz/todo/todo-list.html')
+require('../biz/about/about.html')
+<app>
+    <div>riot</div>
+    <ul>
+        <li><a href="/about">about</a></li>
+        <li><a href="/todo">todo</a></li>
+    </ul>
+    <about></about>
+    <todo-list></todo-list>
+    <script>
+        "use strict";
+        this.mixin('router');
+        this.$routeConfig([
+            {
+                path: '/about',
+                name: 'about'
+            },
+            {
+                path: '/todo',
+                name: 'todo-list',
+                defaultRoute: true
+            }
+        ]);
+
+    </script>
+</app>

@@ -1,0 +1,35 @@
+require('./test1.html');
+require('./test2.html');
+<nest show = {show}>
+    <div>nest</div>
+    <ul>
+        <li><a href="/about/nest/_111/test1">{opts.route.$state}</a></li>
+        <li><a href="/about/nest/_111/test2">test2</a></li>
+    </ul>
+    <test1></test1>
+    <test2></test2>
+    <script>
+        import {connect} from 'riot-redux';
+        import actions from '../todo/todo.actions';
+        this.mixin('router');
+        connect(
+            (state)=>({
+                route: state.route
+            }),
+            (dispatch)=>({
+                getTodos: (next) => dispatch(actions.getTodos(next))
+            })
+        )(this);
+        this.$routeConfig([
+            {
+                path: '/test1',
+                name: 'test1',
+                auth: true
+            },
+            {
+                path: '/test2',
+                name: 'test2'
+            }
+        ]);
+    </script>
+</nest>
